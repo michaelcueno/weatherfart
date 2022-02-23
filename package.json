@@ -1,0 +1,19 @@
+{
+  "name": "weatherfart",
+  "version": "0.0.1",
+  "description": "Keeping a tight clench on the weather",
+  "main": "entrypoint.js",
+  "author": "michaelcueno <cueno1323@gmail.com>",
+  "license": "Farts",
+  "private": true,
+  "scripts": {
+    "compile": "tsc"
+  },
+  "dependencies": {
+    "axios": "^0.21.1"
+  },
+  "devDependencies": {
+    "tsc": "latest",
+    "typescript": "latest"
+  }
+}
