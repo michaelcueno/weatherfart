@@ -1,0 +1,14 @@
+#!/bin/bash 
+
+set -x
+
+# Sometimes companies have their own NPM registries... 
+OG_REG=$(npm config get registry)
+PUBLIC_REG=https://registry.npmjs.org
+
+yarn config set registry $PUBLIC_REG
+
+yarn install
+
+yarn config set registry $OG_REG
+
