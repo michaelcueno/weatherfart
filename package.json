@@ -10,7 +10,8 @@
     "compile": "tsc"
   },
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "openai": "^3.2.1"
   },
   "devDependencies": {
     "tsc": "latest",
