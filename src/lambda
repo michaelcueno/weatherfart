@@ -78,8 +78,7 @@ async function getWeatherReport() {
       },
 		})
 	
-	  debugger;
-	
+  debugger;
 	const current = response?.data?.currently as WeatherResponse;;
 	delete current.time;
 	delete current.icon;
@@ -91,9 +90,9 @@ async function getWeatherReport() {
   }
   current.temperature = `${current.temperature} degrees`;
   current.apparentTemperature = `${current.apparentTemperature} degrees`;
-  console.log(JSON.stringify(current));
   return current;
 }
 
-getWeatherReport();
+main();
+
 

@@ -40,33 +40,9 @@ const openai = new OpenAIApi(configuration);
 const system_message = `You are a very rude and condescending local news weather man. You have a sense of humor but can only tell fart jokes. 
 When asked for a weather report, you MUST INCLUDE FART JOKES in the report. You must also begin the report by insulting the user.`;
 
-async function main() {
-
-  const weather = await getWeatherReport();
-  const input_for_weather = `${weather_preable} ${JSON.stringify(weather)}`;
-
-  try {
-    const response = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo',
-    
-      messages: [
-         { role: "system", content: system_message },
-         { role: "user", content: input_for_weather },
-      ],
-      temperature: 0.7,
-    }); 
-    response?.data.choices.forEach((choice) => {
-      console.log(choice.message);
-    });
-  } catch (error) {
-    console.log(error.message);
-  }
-
-}
-
 // Use Axios to fetch the wather from api.pirateweather.net
-async function getWeatherReport() {
-  const url = `https://api.pirateweather.net/forecast/${weatherKey}/47.6554417,-122.3481066\?\&units\=us`;
+async function getWeatherReport(lat: string, long: string) {
+  const url = `https://api.pirateweather.net/forecast/${weatherKey}/${lat},${long}\?\&units\=us`;
 	const response: any = await axios.default
 		.request({
       method: 'get',
@@ -77,8 +53,6 @@ async function getWeatherReport() {
         'X-RapidAPI-Host': 'famous-quotes4.p.rapidapi.com',
       },
 		})
-	
-	  debugger;
 	
 	const current = response?.data?.currently as WeatherResponse;;
 	delete current.time;
@@ -91,9 +65,36 @@ async function getWeatherReport() {
   }
   current.temperature = `${current.temperature} degrees`;
   current.apparentTemperature = `${current.apparentTemperature} degrees`;
-  console.log(JSON.stringify(current));
   return current;
 }
 
-getWeatherReport();
+exports.handler = async (event: any) => {
+    const lat = event?.queryStringParameters?.lag;
+    const long = event?.queryStringParameters?.long;
 
+    const weather = await getWeatherReport(lat, long);
+    const input_for_weather = `${weather_preable} ${JSON.stringify(weather)}`;
+
+    const lambdaResponse: any = {
+        statusCode: 200,
+        body: { chat: [] },
+    };
+    try {
+      const response = await openai.createChatCompletion({
+        model: 'gpt-3.5-turbo',
+      
+        messages: [
+           { role: "system", content: system_message },
+           { role: "user", content: input_for_weather },
+        ],
+        temperature: 0.7,
+      }); 
+      response?.data.choices.forEach((choice) => {
+        lambdaResponse.body.chat.push(choice.message);
+      });
+    } catch (error) {
+      lambdaResponse.error = error.message;
+    }
+
+    return lambdaResponse;
+};

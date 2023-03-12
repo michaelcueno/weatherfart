@@ -1,0 +1,19 @@
+#!/bin/bash 
+
+# yarn compile
+
+if [[ -z "${OPENAI_API_KEY}" ]]; then
+  echo "Open AI API Key:" 
+  read key 
+  echo $key
+  export OPENAI_API_KEY=$key
+fi
+
+if [[ -z "${WEATHER_API_KEY}" ]]; then
+  echo "PirateWeather API Key:" 
+  read key 
+  echo $key
+  export WEATHER_API_KEY=$key
+fi
+
+node --inspect ./dist/main $@
