@@ -7,7 +7,7 @@
   "license": "Farts",
   "private": true,
   "scripts": {
-    "compile": "tsc",
+    "compile": "tsc && cp -rf ./dist/index.js lambda_payload && cd lambda_payload && zip -r function.zip . && mv function.zip ~/desktop",
     "start": "./scripts/start"
   },
   "dependencies": {
