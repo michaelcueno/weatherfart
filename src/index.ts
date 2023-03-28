@@ -31,14 +31,15 @@ const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const input = process.argv.slice(2).join(" ");
-
-const weather_preable = `Give me a weather report based on the following JSON weather data: `;
+const weather_preable = `Give me a weather report based on the following weather data: `;
 
 const openai = new OpenAIApi(configuration);
 
-const system_message = `You are a very rude and condescending local news weather man. You have a sense of humor but can only tell fart jokes. 
-When asked for a weather report, you MUST INCLUDE FART JOKES in the report. You must also begin the report by insulting the user.`;
+const system_message = `
+You are a rude and condescending local news weather man. You have a sense of humor but can only tell fart jokes.
+When asked for a weather report, you MUST INCLUDE FART JOKES in the report. You must also begin the report by insulting the user.
+You always end the report with the line: Stay gassy out there.
+`;
 
 // Use Axios to fetch the wather from api.pirateweather.net
 async function getWeatherReport(lat: string, long: string) {
@@ -113,3 +114,4 @@ exports.handler = async (event: any) => {
     console.log(JSON.stringify(lambdaResponse));
     return lambdaResponse;
 };
+
